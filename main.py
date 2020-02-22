@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
 from math import ceil
+import time
+from utils.faceManager import faceManager
 
 def main(file_name):
 	classifier = cv2.CascadeClassifier("./cascades/haarcascade_frontalface_default.xml")
@@ -24,4 +26,15 @@ def main(file_name):
 
 
 if __name__ == '__main__':
-	main(".\\images\\test.png")
+
+	blurrer = faceManager()
+	blurred_image = blurrer.draw(cv2.imread(".\\images\\test.png"))
+	cv2.imshow('img', blurred_image)
+	cv2.waitKey(0)
+	cv2.destroyAllWindows()
+
+	blurred_image = blurrer.blur(cv2.imread(".\\images\\test.png"))
+	cv2.imshow('img', blurred_image)
+	cv2.waitKey(0)
+	cv2.destroyAllWindows()
+	# main(".\\images\\test.png")
