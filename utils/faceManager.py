@@ -47,8 +47,34 @@ class faceManager:
 
 		return original_image
 
-	def pixelate(self, image):
-		pass
+	def pixelate(self, image, division=10):
+		original_image = copy.deepcopy(image)
+		target_image = self.preprocess_image(image)
+
+		faces = self.detect_faces(target_image)
+
+		for (x,y,w,h) in faces:
+
+			if len(original_image.shape) > 2:
+				cut_image = original_image[y:y+h, x:x+w, :]
+				
+				rows, cols, dims = cut_image.shape
+
+				for i in range(1, division+1):
+					for j in range(1, division+1):
+						for k in range(0,dims):
+							avg = int(np.average(original_image[y+int(((i-1)/division)*rows):y+int((i/division)*rows), x+int(((j-1)/division)*cols):x+int((j/division)*cols), k]))
+							original_image[y+int(((i-1)/division)*rows):y+int((i/division)*rows), x+int(((j-1)/division)*cols):x+int((j/division)*cols), k].fill(avg)
+
+			else:
+				cut_image = original_image[y:y+h, x:x+w]
+				rows, cols = cut_image.shape
+
+				for i in range(1, division+1):
+					for j in range(1, division+1):
+						avg = int(np.average(original_image[y+int(((i-1)/division)*rows):y+int((i/division)*rows), x+int(((j-1)/division)*cols):x+int((j/division)*cols)]))
+						original_image[y+int(((i-1)/division)*rows):y+int((i/division)*rows), x+int(((j-1)/division)*cols):x+int((j/division)*cols)].fill(avg)
+		return original_image
 
 	def draw(self, image, color=(0,255,0)):
 		original_image = copy.deepcopy(image)

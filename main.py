@@ -28,12 +28,18 @@ def main(file_name):
 if __name__ == '__main__':
 
 	blurrer = faceManager()
-	blurred_image = blurrer.draw(cv2.imread(".\\images\\test.png"))
-	cv2.imshow('img', blurred_image)
-	cv2.waitKey(0)
-	cv2.destroyAllWindows()
+	# blurred_image = blurrer.draw(cv2.imread(".\\images\\test.png"))
+	# cv2.imshow('img', blurred_image)
+	# cv2.waitKey(0)
+	# cv2.destroyAllWindows()
 
-	blurred_image = blurrer.blur(cv2.imread(".\\images\\test.png"))
+	# blurred_image = blurrer.blur(cv2.imread(".\\images\\test.png"))
+	# cv2.imshow('img', blurred_image)
+	# cv2.waitKey(0)
+	# cv2.destroyAllWindows()
+
+	# blurred_image = blurrer.pixelate(cv2.imread(".\\images\\test.png"))
+	blurred_image = blurrer.pixelate(cv2.cvtColor(cv2.imread(".\\images\\test.png"), cv2.COLOR_BGR2GRAY))
 	cv2.imshow('img', blurred_image)
 	cv2.waitKey(0)
 	cv2.destroyAllWindows()
