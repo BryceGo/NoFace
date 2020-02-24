@@ -11,7 +11,7 @@ class faceManager:
         self.cascade =  cv2.CascadeClassifier(cascade_file)
         self.error_flag = False
 
-    def detect_faces(self, image, threshold = 3):
+    def detect_faces(self, image, threshold = 5):
         faces = self.cascade.detectMultiScale(image,1.3,threshold)
         return faces
 
