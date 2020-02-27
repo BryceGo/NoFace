@@ -15,6 +15,41 @@ class faceManager:
         faces = self.cascade.detectMultiScale(image,1.3,threshold)
         return faces
 
+    def get_iou(face1, face2):
+        pass
+
+    def track_faces(self, frame, detected_faces=[], faces_currently_tracking=[], iou_threshold = 0.6):
+        # faces_currently_tracking = (tracker, bbox)
+
+        currently_tracking = []
+
+        for tracker, bound_box in faces_currently_tracking:
+            success, bbox = tracker.update(frame)
+
+            if success:
+                currently_tracking.append((tracker, bbox))
+
+        for face in detected_faces:
+
+            iou_pass = True
+
+            for tracked in currently_tracking:
+                if get_iou(face, tracked[0]) > iou_threshold:
+                    iou_pass = False
+                    break
+
+
+            if iou_pass == True:
+                # New face detected
+
+                tracker = cv2.TrackerMIL_create()
+                tracker.init(frame, face)
+
+                currently_tracking.append((tracker, face))
+        
+        return currently_tracking
+
+
     def preprocess_image(self, image):
         if not(isinstance(image, np.ndarray)):
             self.error_flag = True
@@ -84,5 +119,10 @@ class faceManager:
 
         for (x,y,w,h) in faces:
             original_image = cv2.rectangle(original_image, (x,y), (x+w,y+h), color, 1)
-
         return original_image
+
+    def draw_frame(self, frame, faces, color=(0,255,0)):
+
+        for (tracker, (x,y,w,h)) in faces:
+            frame = cv2.rectangle(frame, (x,y), (x+w,y+h), color, 1)
+        return frame
