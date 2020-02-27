@@ -6,8 +6,6 @@ from utils.faceManager import faceManager
 import os
 import copy
 
-
-
 def main(file_name):
     ext = tuple([".3g2", ".3gp", ".asf", ".asx", ".avi", ".flv", \
             ".m2ts", ".mkv", ".mov", ".mp4", ".mpg", ".mpeg", \
@@ -25,6 +23,7 @@ def main(file_name):
         fps = int(cap.get(cv2.CAP_PROP_FPS))
         output_file = cv2.VideoWriter('test.avi', cv2.VideoWriter_fourcc('M','J','P','G'), fps, (width, height))
         count = 0
+        total_count = 0
         current_faces = []
         while (cap.isOpened()):
             ret, frame = cap.read()
@@ -32,24 +31,22 @@ def main(file_name):
             if ret == False:
                 break
 
+            total_count += 1
+            print(total_count)
 
-            if count % 10 == 0:
+            o_image =  copy.deepcopy(frame)
+            if count % 5 == 0:
                 count = 0
-
-                o_image =  copy.deepcopy(frame)
                 detect_image = face_m.preprocess_image(frame)
                 faces = face_m.detect_faces(detect_image)
 
                 current_faces = face_m.track_faces(frame = o_image, detected_faces = faces, faces_currently_tracking = current_faces)
                 output_file.write(face_m.draw_frame(o_image, current_faces))
 
-            else:
+            else :
                 current_faces = face_m.track_faces(frame = frame, faces_currently_tracking = current_faces)
                 output_file.write(face_m.draw_frame(o_image, current_faces))
 
-            count += 1
-
-            output_file.write(face_m.pixelate(frame))
             count += 1
         
         cap.release()
@@ -78,4 +75,4 @@ if __name__ == '__main__':
     # cv2.destroyAllWindows()
     # main(".\\images\\test.png")
 
-    main("faces.mp4")
+    main("test.mp4")
