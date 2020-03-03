@@ -94,19 +94,23 @@ class videoManager:
 
             original_image = copy.deepcopy(frame)
 
-            if count % 5 == 0:
+            if count % 10 == 0:
                 count = 0
 
                 if model == 'yl':
                     faces = self.fm.detect_faces_yolo(frame)
 
                     current_faces = self.fm.track_faces(frame = original_image, detected_faces = faces, faces_currently_tracking = current_faces)
-                    video_writer.write(self.fm.blur_frame(original_image, current_faces))
+                    video_writer.write(self.fm.draw_frame(original_image, current_faces))
 
-            else:
+            else: #if count % 3 == 0:
                 if model == 'yl':
                     current_faces = self.fm.track_faces(frame = original_image, faces_currently_tracking = current_faces)
-                    video_writer.write(self.fm.blur_frame(original_image, current_faces))
+                    video_writer.write(self.fm.draw_frame(original_image, current_faces))
+            # else:
+            #     if model == 'yl':
+            #         video_writer.write(self.fm.draw_frame(original_image, current_faces))
+
 
             total_count += 1
             count += 1
