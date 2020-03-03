@@ -4,7 +4,9 @@ from math import ceil
 import time
 from utils.faceManager import faceManager
 import os
+from utils import yoloDetector as yd
 import copy
+from utils import videoManager
 
 def main(file_name):
     ext = tuple([".3g2", ".3gp", ".asf", ".asx", ".avi", ".flv", \
@@ -37,8 +39,9 @@ def main(file_name):
             o_image =  copy.deepcopy(frame)
             if count % 5 == 0:
                 count = 0
-                detect_image = face_m.preprocess_image(frame)
-                faces = face_m.detect_faces(detect_image)
+                # detect_image = face_m.preprocess_image(frame)
+                detect_image = frame
+                faces = face_m.detect_faces_yolo(detect_image)
 
                 current_faces = face_m.track_faces(frame = o_image, detected_faces = faces, faces_currently_tracking = current_faces)
                 output_file.write(face_m.draw_frame(o_image, current_faces))
@@ -57,22 +60,9 @@ def main(file_name):
 
 if __name__ == '__main__':
 
-    # blurrer = faceManager()
-    # blurred_image = blurrer.draw(cv2.imread(".\\images\\test.png"))
-    # cv2.imshow('img', blurred_image)
-    # cv2.waitKey(0)
-    # cv2.destroyAllWindows()
+    vm = videoManager.videoManager()
+    vm.start_video(filename="faces.mp4", save_file=False)
+    while True:
+        pass
 
-    # blurred_image = blurrer.blur(cv2.imread(".\\images\\test.png"))
-    # cv2.imshow('img', blurred_image)
-    # cv2.waitKey(0)
-    # cv2.destroyAllWindows()
-
-    # blurred_image = blurrer.pixelate(cv2.imread(".\\images\\test.png"))
-    # blurred_image = blurrer.pixelate(cv2.cvtColor(cv2.imread(".\\images\\test.png"), cv2.COLOR_BGR2GRAY))
-    # cv2.imshow('img', blurred_image)
-    # cv2.waitKey(0)
-    # cv2.destroyAllWindows()
-    # main(".\\images\\test.png")
-
-    main("test.mp4")
+    # main("america.mp4")

@@ -1,3 +1,4 @@
+from utils import yoloDetector
 import cv2
 import numpy as np
 from math import ceil
@@ -10,10 +11,14 @@ class faceManager:
     def __init__(self, cascade_file = "./cascades/haarcascade_frontalface_default.xml"):
         self.cascade =  cv2.CascadeClassifier(cascade_file)
         self.error_flag = False
+        self.yolo = yoloDetector.yolov3Manager()
 
     def detect_faces(self, image, threshold = 5):
         faces = self.cascade.detectMultiScale(image,1.3,threshold)
         return faces
+
+    def detect_faces_yolo(self, image, confidence_threshold = 0.5, nonmax_threshold = 0.4):
+        return self.yolo.process_image(image, confidence_threshold, nonmax_threshold)
 
     def get_iou(self, coord1, coord2):
         # Coordinates have to be as a tuple of the form (x,y,w,h)
@@ -32,10 +37,14 @@ class faceManager:
         return abs(float(intersection)/float(box1_area + box2_area - intersection))
 
 
-    def track_faces(self, frame, detected_faces=[], faces_currently_tracking=[], iou_threshold = 0.6):
+    def track_faces(self, frame, detected_faces=[], faces_currently_tracking=[], iou_threshold = 0.3):
         # faces_currently_tracking = (tracker, bbox)
 
-        currently_tracking = []
+        if len(detected_faces) == 0 and len(faces_currently_tracking) == 0:
+            return []
+
+        current_trackers = []
+        current_bbox = []
 
         for tracker, bound_box in faces_currently_tracking:
             success, bbox = tracker.update(frame)
@@ -43,28 +52,32 @@ class faceManager:
             bbox = (int(bbox[0]), int(bbox[1]), int(bbox[2]), int(bbox[3]))
 
             if success:
-                currently_tracking.append((tracker, bbox))
-
-        for face in detected_faces:
-            face = tuple(face)
-
-            iou_pass = True
-
-            for tracked in currently_tracking:
-                if self.get_iou(face, tracked[1]) > iou_threshold:
-                    iou_pass = False
-                    break
+                current_trackers.append(tracker)
+                current_bbox.append(bbox)
 
 
-            if iou_pass == True:
-                # New face detected
+        indices = cv2.dnn.NMSBoxes(current_bbox + detected_faces, 
+                    [0.7 for i in range(0, len(current_bbox))] + [1.0 for i in range(0, len(detected_faces))],
+                    0.5,
+                    0.4)
+
+
+        currently_tracking = []
+        for i in indices:
+            index = i[0]
+            if index < len(current_bbox):
+                currently_tracking.append((current_trackers[index], current_bbox[index]))
+
+            else:
+                box = tuple(detected_faces[index - len(current_bbox)])
+
                 tracker = cv2.TrackerKCF_create()
-                tracker.init(frame, face)
+                tracker.init(frame, box)
+                currently_tracking.append((tracker, box))
 
-                currently_tracking.append((tracker, face))
+        print("Currently Tracking: ", len(currently_tracking))
         
         return currently_tracking
-
 
     def preprocess_image(self, image):
         if not(isinstance(image, np.ndarray)):
@@ -138,7 +151,30 @@ class faceManager:
         return original_image
 
     def draw_frame(self, frame, faces, color=(0,255,0)):
-
         for (tracker, (x,y,w,h)) in faces:
             frame = cv2.rectangle(frame, (x,y), (x+w,y+h), color, 1)
+        return frame
+
+    def draw_blur(self, frame, faces, intensity = 5):
+        for (tracker, (x,y,w,h)) in faces:
+
+            if len(frame.shape) > 2:
+                cut_image = frame[y:y+h, x:x+w, :]
+                
+                rows, cols, dims = cut_image.shape
+
+                for i in range(1, division+1):
+                    for j in range(1, division+1):
+                        for k in range(0,dims):
+                            avg = int(np.average(frame[y+int(((i-1)/division)*rows):y+int((i/division)*rows), x+int(((j-1)/division)*cols):x+int((j/division)*cols), k]))
+                            frame[y+int(((i-1)/division)*rows):y+int((i/division)*rows), x+int(((j-1)/division)*cols):x+int((j/division)*cols), k].fill(avg)
+
+            else:
+                cut_image = frame[y:y+h, x:x+w]
+                rows, cols = cut_image.shape
+
+                for i in range(1, division+1):
+                    for j in range(1, division+1):
+                        avg = int(np.average(frame[y+int(((i-1)/division)*rows):y+int((i/division)*rows), x+int(((j-1)/division)*cols):x+int((j/division)*cols)]))
+                        frame[y+int(((i-1)/division)*rows):y+int((i/division)*rows), x+int(((j-1)/division)*cols):x+int((j/division)*cols)].fill(avg)
         return frame
