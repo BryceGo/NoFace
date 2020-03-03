@@ -155,7 +155,7 @@ class faceManager:
             frame = cv2.rectangle(frame, (x,y), (x+w,y+h), color, 1)
         return frame
 
-    def draw_blur(self, frame, faces, intensity = 5):
+    def pixelate_frame(self, frame, faces, divison = 10):
         for (tracker, (x,y,w,h)) in faces:
 
             if len(frame.shape) > 2:
@@ -177,4 +177,19 @@ class faceManager:
                     for j in range(1, division+1):
                         avg = int(np.average(frame[y+int(((i-1)/division)*rows):y+int((i/division)*rows), x+int(((j-1)/division)*cols):x+int((j/division)*cols)]))
                         frame[y+int(((i-1)/division)*rows):y+int((i/division)*rows), x+int(((j-1)/division)*cols):x+int((j/division)*cols)].fill(avg)
+        return frame
+
+    def blur_frame(self, frame, faces, intensity = 5):
+        for (tracker, (x,y,w,h)) in faces:
+            shape = ceil(max(w,h)/intensity)
+            if shape == 0:
+                shape = 1
+            kernel = np.ones((shape,shape), np.float32)/(shape*shape)
+
+            if len(frame.shape) > 2:
+                for i in range(0,frame.shape[2]):
+                    frame[y:y+h, x:x+w, i] = cv2.filter2D(frame[y:y+h, x:x+w, i], -1, kernel)
+            else:
+                frame[y:y+h, x:x+w] = cv2.filter2D(frame[y:y+h, x:x+w], -1, kernel)
+
         return frame

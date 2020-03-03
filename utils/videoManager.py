@@ -101,12 +101,12 @@ class videoManager:
                     faces = self.fm.detect_faces_yolo(frame)
 
                     current_faces = self.fm.track_faces(frame = original_image, detected_faces = faces, faces_currently_tracking = current_faces)
-                    video_writer.write(self.fm.draw_frame(original_image, current_faces))
+                    video_writer.write(self.fm.blur_frame(original_image, current_faces))
 
             else:
                 if model == 'yl':
                     current_faces = self.fm.track_faces(frame = original_image, faces_currently_tracking = current_faces)
-                    video_writer.write(self.fm.draw_frame(original_image, current_faces))
+                    video_writer.write(self.fm.blur_frame(original_image, current_faces))
 
             total_count += 1
             count += 1
