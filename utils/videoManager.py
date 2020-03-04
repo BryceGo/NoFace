@@ -69,6 +69,7 @@ class videoManager:
         width  = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         fps = int(cap.get(cv2.CAP_PROP_FPS))
+        total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
         if save_file == True:
             video_writer = cv2.VideoWriter(output_file, cv2.VideoWriter_fourcc('M','J','P','G'), fps, (width, height))
@@ -111,10 +112,14 @@ class videoManager:
             #     if model == 'yl':
             #         video_writer.write(self.fm.draw_frame(original_image, current_faces))
 
+            if total_count % 10 == 0:
+            	self.status_queue.put({"STATUS": "PROGRESS", "VALUE": int((float(total_count)/float(total_frames))*100)})
 
             total_count += 1
             count += 1
 
+		self.status_queue.put({"STATUS": "PROGRESS", "VALUE": 100})
+		
         cap.release()
         video_writer.release()
         cv2.destroyAllWindows()
