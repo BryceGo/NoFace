@@ -1,0 +1,136 @@
+# -*- coding: utf-8 -*-
+
+# Form implementation generated from reading ui file 'main_ui.ui'
+#
+# Created by: PyQt5 UI code generator 5.14.1
+#
+# WARNING! All changes made in this file will be lost!
+
+
+from PyQt5 import QtCore, QtGui, QtWidgets
+
+
+class Ui_MainWindow(object):
+    def setupUi(self, MainWindow):
+        MainWindow.setObjectName("MainWindow")
+        MainWindow.resize(697, 433)
+        MainWindow.setWindowOpacity(1.0)
+        MainWindow.setAutoFillBackground(False)
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
+        self.gridLayout_2 = QtWidgets.QGridLayout(self.centralwidget)
+        self.gridLayout_2.setObjectName("gridLayout_2")
+        self.line = QtWidgets.QFrame(self.centralwidget)
+        self.line.setFrameShape(QtWidgets.QFrame.HLine)
+        self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line.setObjectName("line")
+        self.gridLayout_2.addWidget(self.line, 2, 0, 1, 1)
+        self.t_main = QtWidgets.QTextBrowser(self.centralwidget)
+        self.t_main.setObjectName("t_main")
+        self.gridLayout_2.addWidget(self.t_main, 1, 0, 1, 1)
+        self.progressBar = QtWidgets.QProgressBar(self.centralwidget)
+        self.progressBar.setProperty("value", 0)
+        self.progressBar.setObjectName("progressBar")
+        self.gridLayout_2.addWidget(self.progressBar, 3, 0, 1, 1)
+        self.gridLayout = QtWidgets.QGridLayout()
+        self.gridLayout.setContentsMargins(30, -1, 15, -1)
+        self.gridLayout.setObjectName("gridLayout")
+        self.t_source = QtWidgets.QLineEdit(self.centralwidget)
+        self.t_source.setEnabled(False)
+        self.t_source.setDragEnabled(False)
+        self.t_source.setReadOnly(True)
+        self.t_source.setObjectName("t_source")
+        self.gridLayout.addWidget(self.t_source, 0, 0, 1, 1)
+        self.t_destination = QtWidgets.QLineEdit(self.centralwidget)
+        self.t_destination.setEnabled(False)
+        self.t_destination.setReadOnly(True)
+        self.t_destination.setObjectName("t_destination")
+        self.gridLayout.addWidget(self.t_destination, 1, 0, 1, 1)
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_3.setSpacing(3)
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
+        self.r_drawFaces = QtWidgets.QRadioButton(self.centralwidget)
+        self.r_drawFaces.setObjectName("r_drawFaces")
+        self.verticalLayout_3.addWidget(self.r_drawFaces)
+        self.r_blurFaces = QtWidgets.QRadioButton(self.centralwidget)
+        self.r_blurFaces.setEnabled(True)
+        self.r_blurFaces.setChecked(True)
+        self.r_blurFaces.setObjectName("r_blurFaces")
+        self.verticalLayout_3.addWidget(self.r_blurFaces)
+        self.r_pixelateFaces = QtWidgets.QRadioButton(self.centralwidget)
+        self.r_pixelateFaces.setObjectName("r_pixelateFaces")
+        self.verticalLayout_3.addWidget(self.r_pixelateFaces)
+        self.gridLayout.addLayout(self.verticalLayout_3, 2, 1, 1, 1)
+        self.b_browse = QtWidgets.QPushButton(self.centralwidget)
+        self.b_browse.setObjectName("b_browse")
+        self.gridLayout.addWidget(self.b_browse, 0, 1, 1, 1)
+        self.b_saveAs = QtWidgets.QPushButton(self.centralwidget)
+        self.b_saveAs.setObjectName("b_saveAs")
+        self.gridLayout.addWidget(self.b_saveAs, 1, 1, 1, 1)
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setSizeConstraint(QtWidgets.QLayout.SetDefaultConstraint)
+        self.horizontalLayout.setContentsMargins(0, -1, 15, -1)
+        self.horizontalLayout.setSpacing(15)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.b_liveStream = QtWidgets.QPushButton(self.centralwidget)
+        self.b_liveStream.setMinimumSize(QtCore.QSize(0, 50))
+        self.b_liveStream.setObjectName("b_liveStream")
+        self.horizontalLayout.addWidget(self.b_liveStream)
+        self.b_analyzeVideo = QtWidgets.QPushButton(self.centralwidget)
+        self.b_analyzeVideo.setMinimumSize(QtCore.QSize(0, 50))
+        self.b_analyzeVideo.setObjectName("b_analyzeVideo")
+        self.horizontalLayout.addWidget(self.b_analyzeVideo)
+        self.r_stop = QtWidgets.QPushButton(self.centralwidget)
+        self.r_stop.setMinimumSize(QtCore.QSize(0, 50))
+        self.r_stop.setObjectName("r_stop")
+        self.horizontalLayout.addWidget(self.r_stop)
+        self.gridLayout.addLayout(self.horizontalLayout, 2, 0, 1, 1)
+        self.gridLayout_2.addLayout(self.gridLayout, 4, 0, 1, 1)
+        MainWindow.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(MainWindow)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 697, 21))
+        self.menubar.setObjectName("menubar")
+        MainWindow.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        self.statusbar.setObjectName("statusbar")
+        MainWindow.setStatusBar(self.statusbar)
+
+        self.retranslateUi(MainWindow)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+    def retranslateUi(self, MainWindow):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "NoFace"))
+        self.t_main.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
+        self.t_source.setText(_translate("MainWindow", "Source:"))
+        self.t_destination.setText(_translate("MainWindow", "Destination:"))
+        self.r_drawFaces.setStatusTip(_translate("MainWindow", "Draw rectangular boxes on detected faces"))
+        self.r_drawFaces.setText(_translate("MainWindow", "Draw Faces"))
+        self.r_blurFaces.setStatusTip(_translate("MainWindow", "Blur detected faces"))
+        self.r_blurFaces.setText(_translate("MainWindow", "Blur Faces"))
+        self.r_pixelateFaces.setStatusTip(_translate("MainWindow", "Pixelate detected faces"))
+        self.r_pixelateFaces.setText(_translate("MainWindow", "Pixelate Faces"))
+        self.b_browse.setStatusTip(_translate("MainWindow", "Choose the source file to process"))
+        self.b_browse.setText(_translate("MainWindow", "Browse"))
+        self.b_saveAs.setStatusTip(_translate("MainWindow", "Choose the destination file to save"))
+        self.b_saveAs.setText(_translate("MainWindow", "Save as"))
+        self.b_liveStream.setStatusTip(_translate("MainWindow", "Process the live stream from the camera"))
+        self.b_liveStream.setText(_translate("MainWindow", "Live Stream"))
+        self.b_analyzeVideo.setStatusTip(_translate("MainWindow", "Analyze the video from the source"))
+        self.b_analyzeVideo.setText(_translate("MainWindow", "Analyze Video"))
+        self.r_stop.setStatusTip(_translate("MainWindow", "Stop"))
+        self.r_stop.setText(_translate("MainWindow", "Stop"))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    sys.exit(app.exec_())
