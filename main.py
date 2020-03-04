@@ -1,68 +1,98 @@
 import cv2
 import numpy as np
-from math import ceil
 import time
-from utils.faceManager import faceManager
 import os
-from utils import yoloDetector as yd
 import copy
+import sys
+from math import ceil
 from utils import videoManager
+from ui import main_ui
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QFileDialog, QWidget
+
 
 def main(file_name):
-    ext = tuple([".3g2", ".3gp", ".asf", ".asx", ".avi", ".flv", \
-            ".m2ts", ".mkv", ".mov", ".mp4", ".mpg", ".mpeg", \
-            ".rm", ".swf", ".vob", ".wmv"])
+    ext = tuple([".avi", ".mp4"])
 
-    face_m = faceManager()
+# Helper functions
+def openFile():
+    options = QFileDialog.Options()
+    options |= QFileDialog.DontUseNativeDialog
 
-    if os.path.basename(file_name).endswith(ext) == True:
-        cap = cv2.VideoCapture(file_name)
-        
-        if cap == None:
-            return None
-        width  = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-        height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-        fps = int(cap.get(cv2.CAP_PROP_FPS))
-        output_file = cv2.VideoWriter('test.avi', cv2.VideoWriter_fourcc('M','J','P','G'), fps, (width, height))
-        count = 0
-        total_count = 0
-        current_faces = []
-        while (cap.isOpened()):
-            ret, frame = cap.read()
+    dialog = QFileDialog()
+    dialog.setNameFilters(["*.mp4", "*.avi"])
+    dialog.exec()
+    return dialog.selectedFiles()
 
-            if ret == False:
-                break
+def saveFile():
+    options = QFileDialog.Options()
+    options |= QFileDialog.DontUseNativeDialog
+    
+    window = QtWidgets.QWidget()
+    save = QFileDialog.getSaveFileName(window, 'Save File')
+    if save != None and len(save) > 1:
+        return save[0]
+    else:
+        return None
 
-            total_count += 1
-            print(total_count)
+class MainWindow():
 
-            o_image =  copy.deepcopy(frame)
-            if count % 5 == 0:
-                count = 0
-                # detect_image = face_m.preprocess_image(frame)
-                detect_image = frame
-                faces = face_m.detect_faces_yolo(detect_image)
+    def __init__(self):
+        # super(MainWindow, self).__init__()
 
-                current_faces = face_m.track_faces(frame = o_image, detected_faces = faces, faces_currently_tracking = current_faces)
-                output_file.write(face_m.draw_frame(o_image, current_faces))
+        self.app = QtWidgets.QApplication(sys.argv)
+        self.window = QtWidgets.QMainWindow()
+        self.ui = main_ui.Ui_MainWindow()
+        self.ui.setupUi(self.window)
+        self.vManager = videoManager.videoManager()
+        self.source_files = None
+        self.destination_file = None
 
-            else :
-                current_faces = face_m.track_faces(frame = frame, faces_currently_tracking = current_faces)
-                output_file.write(face_m.draw_frame(o_image, current_faces))
+    def run(self):
+        self.ui.b_browse.clicked.connect(self.browse_onclick)
+        self.ui.b_saveAs.clicked.connect(self.saveAs_onclick)
+        self.ui.b_liveStream.clicked.connect(self.liveStream_onclick)
+        self.ui.b_analyzeVideo.clicked.connect(self.analyzeVideo_onclick)
+        self.ui.b_stop.clicked.connect(self.stop_onclick)
 
-            count += 1
-        
-        cap.release()
-        output_file.release()
+        self.window.show()
+        sys.exit(self.app.exec_())
 
+    def browse_onclick(self):
+        files = openFile()
+        self.ui.t_source.setText("Source: {}".format(','.join(files)))
+        self.source_files = files
+
+        if len(files) > 0:
+            self.ui.t_main.append("Set source file(s): {}".format(','.join(files)))
+        return
+
+    def saveAs_onclick(self):
+        file = saveFile()
+        self.ui.t_destination.setText("Destination: {}".format(file))
+        self.destination_file = file
+
+        if file != None:
+            self.ui.t_main.append("Set destination file: {}".format(file))
+
+        return
+
+    def liveStream_onclick(self):
+        pass
+
+    def analyzeVideo_onclick(self):
+        pass
+
+    def stop_onclick(self):
+        pass
 
 
 
 if __name__ == '__main__':
+    main_ui = MainWindow()
+    main_ui.run()
 
-    vm = videoManager.videoManager()
-    vm.start_video(filename="faces.mp4", save_file=False)
-    while True:
-        pass
-
-    # main("america.mp4")
+    # vm = videoManager.videoManager()
+    # vm.start_video(filename="faces.mp4", save_file=False)
+    # while True:
+    #     pass

@@ -80,10 +80,10 @@ class Ui_MainWindow(object):
         self.b_analyzeVideo.setMinimumSize(QtCore.QSize(0, 50))
         self.b_analyzeVideo.setObjectName("b_analyzeVideo")
         self.horizontalLayout.addWidget(self.b_analyzeVideo)
-        self.r_stop = QtWidgets.QPushButton(self.centralwidget)
-        self.r_stop.setMinimumSize(QtCore.QSize(0, 50))
-        self.r_stop.setObjectName("r_stop")
-        self.horizontalLayout.addWidget(self.r_stop)
+        self.b_stop = QtWidgets.QPushButton(self.centralwidget)
+        self.b_stop.setMinimumSize(QtCore.QSize(0, 50))
+        self.b_stop.setObjectName("b_stop")
+        self.horizontalLayout.addWidget(self.b_stop)
         self.gridLayout.addLayout(self.horizontalLayout, 2, 0, 1, 1)
         self.gridLayout_2.addLayout(self.gridLayout, 4, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
@@ -122,8 +122,8 @@ class Ui_MainWindow(object):
         self.b_liveStream.setText(_translate("MainWindow", "Live Stream"))
         self.b_analyzeVideo.setStatusTip(_translate("MainWindow", "Analyze the video from the source"))
         self.b_analyzeVideo.setText(_translate("MainWindow", "Analyze Video"))
-        self.r_stop.setStatusTip(_translate("MainWindow", "Stop"))
-        self.r_stop.setText(_translate("MainWindow", "Stop"))
+        self.b_stop.setStatusTip(_translate("MainWindow", "Stop"))
+        self.b_stop.setText(_translate("MainWindow", "Stop"))
 
 
 if __name__ == "__main__":
