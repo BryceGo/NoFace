@@ -54,7 +54,7 @@ class videoManager:
         self.tracked_thread.start()
         return True
 
-    def process_video(self, filename, output_file, from_file = True, save_file=True, model='yl', process = 'draw'):
+    def process_video(self, filename, output_file, from_file = True, save_file=True, model='yl', process = 'draw', signal=None):
 
         if from_file == True:
             if os.path.exists(filename) != True:
@@ -95,7 +95,7 @@ class videoManager:
 
             original_image = copy.deepcopy(frame)
 
-            if count % 10 == 0:
+            if count % int(fps/3) == 0:
                 count = 0
 
                 if model == 'yl':
@@ -112,13 +112,16 @@ class videoManager:
             #     if model == 'yl':
             #         video_writer.write(self.fm.draw_frame(original_image, current_faces))
 
-            if total_count % 10 == 0:
-                self.status_queue.put({"STATUS": "PROGRESS", "VALUE": int((float(total_count)/float(total_frames))*100)})
+            if signal != None:
+                if total_count % fps == 0:
+                    signal.emit(int((float(total_count)/float(total_frames))*100))
+                    # self.status_queue.put({"STATUS": "PROGRESS", "VALUE": int((float(total_count)/float(total_frames))*100)})
 
             total_count += 1
             count += 1
-
-        self.status_queue.put({"STATUS": "PROGRESS", "VALUE": 100})
+        if signal != None:
+            signal.emit(100)
+        # self.status_queue.put({"STATUS": "PROGRESS", "VALUE": 100})
         
         cap.release()
         video_writer.release()

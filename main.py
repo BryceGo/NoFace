@@ -9,10 +9,8 @@ from utils import videoManager
 from ui import main_ui
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QFileDialog, QWidget
+from PyQt5.QtCore import QThread, QObject, pyqtSignal
 
-
-def main(file_name):
-    ext = tuple([".avi", ".mp4"])
 
 # Helper functions
 def openFile():
@@ -35,18 +33,49 @@ def saveFile():
     else:
         return None
 
-class MainWindow():
 
+class VideoPlayer(QThread):
+
+    def __init__(self, signal):
+        super(VideoPlayer, self).__init__()
+        self.vManager = videoManager.videoManager()
+        self.filename = ''
+        self.output_file = ''
+        self.from_file = True
+        self.save_file = True
+        self.process = 'draw'
+        self.signal = signal
+
+    def run(self):
+
+        self.vManager.stop_lock.acquire()
+        self.stop = False
+        self.vManager.stop_lock.release()
+
+        self.vManager.process_video(filename=self.filename,
+                                    output_file=self.output_file,
+                                    from_file=self.from_file,
+                                    save_file=self.save_file,
+                                    process=self.process,
+                                    signal=self.signal)
+
+    def stop(self):
+        self.vManager.stop()
+
+class MainWindow(QObject):
+
+    vp_signal = pyqtSignal(int)
     def __init__(self):
-        # super(MainWindow, self).__init__()
+        super(MainWindow, self).__init__()
 
         self.app = QtWidgets.QApplication(sys.argv)
         self.window = QtWidgets.QMainWindow()
         self.ui = main_ui.Ui_MainWindow()
         self.ui.setupUi(self.window)
-        self.vManager = videoManager.videoManager()
         self.source_files = None
         self.destination_file = None
+        self.vp_signal.connect(self.update_progressBar)
+        self.video_player = VideoPlayer(self.vp_signal)
 
     def run(self):
         self.ui.b_browse.clicked.connect(self.browse_onclick)
@@ -78,7 +107,9 @@ class MainWindow():
         return
 
     def liveStream_onclick(self):
-        pass
+        self.video_player.from_file = False
+        self.video_player.save_file = False
+        self.video_player.start()
 
     def analyzeVideo_onclick(self):
         pass
@@ -86,6 +117,8 @@ class MainWindow():
     def stop_onclick(self):
         pass
 
+    def update_progressBar(self, value):
+        self.ui.progressBar.setValue(value)
 
 
 if __name__ == '__main__':
