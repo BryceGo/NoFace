@@ -94,7 +94,7 @@ class faceManager:
             frame = cv2.rectangle(frame, (x,y), (x+w,y+h), color, 1)
         return frame
 
-    def pixelate_frame(self, frame, faces, divison = 10):
+    def pixelate_frame(self, frame, faces, division = 10):
         for (tracker, (x,y,w,h)) in faces:
 
             if len(frame.shape) > 2:
