@@ -59,8 +59,8 @@ class VideoPlayer(QThread):
                                     process=self.process,
                                     signal=self.signal)
 
-    def stop(self):
-        self.vManager.stop()
+    def stop_manager(self):
+        self.vManager.stop_video()
 
 class MainWindow(QObject):
 
@@ -109,16 +109,53 @@ class MainWindow(QObject):
     def liveStream_onclick(self):
         self.video_player.from_file = False
         self.video_player.save_file = False
+
+        if self.ui.r_drawFaces.isChecked():
+            self.video_player.process = 'draw'
+        elif self.ui.r_blurFaces.isChecked():
+            self.video_player.process = 'blur'
+        elif self.ui.r_pixelateFaces.isChecked():
+            self.video_player.process = 'pixelate'
+
         self.video_player.start()
+        self.ui.t_main.append("Live stream started...")
 
     def analyzeVideo_onclick(self):
-        pass
+
+
+        if isinstance(self.source_files, list) and len(self.source_files) != 0:
+            self.video_player.from_file = True
+            self.video_player.filename = self.source_files[0]
+        else:
+            self.video_player.from_file = False
+            self.video_player.filename = None
+
+        if self.destination_file != None:
+            self.video_player.save_file = True
+            self.video_player.output_file = self.destination_file
+        else:
+            self.video_player.save_file = False
+            self.video_player.output_file = None
+
+
+        if self.ui.r_drawFaces.isChecked():
+            self.video_player.process = 'draw'
+        elif self.ui.r_blurFaces.isChecked():
+            self.video_player.process = 'blur'
+        elif self.ui.r_pixelateFaces.isChecked():
+            self.video_player.process = 'pixelate'
+
+        self.video_player.start()
+        self.ui.t_main.append("Started processing video...")
 
     def stop_onclick(self):
-        pass
+        self.video_player.stop_manager()
+        self.ui.t_main.append("Stopped processing video...")
 
     def update_progressBar(self, value):
         self.ui.progressBar.setValue(value)
+        if value == 100:
+            self.ui.t_main.append("Completed processing video")
 
 
 if __name__ == '__main__':

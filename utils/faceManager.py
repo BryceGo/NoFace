@@ -49,7 +49,7 @@ class faceManager:
         for tracker, bound_box in faces_currently_tracking:
             success, bbox = tracker.update(frame)
 
-            bbox = (int(bbox[0]), int(bbox[1]), int(bbox[2]), int(bbox[3]))
+            bbox = (max(0,int(bbox[0])), max(0,int(bbox[1])), max(0,int(bbox[2])), max(0,int(bbox[3])))
 
             if success:
                 current_trackers.append(tracker)
@@ -74,8 +74,6 @@ class faceManager:
                 tracker = cv2.TrackerKCF_create()
                 tracker.init(frame, box)
                 currently_tracking.append((tracker, box))
-
-        print("Currently Tracking: ", len(currently_tracking))
         
         return currently_tracking
 

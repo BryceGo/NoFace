@@ -80,6 +80,9 @@ class videoManager:
         total_count = 1
         current_faces = []
 
+        if signal != None:
+            signal.emit(0)
+            
         while (cap.isOpened()):
             self.stop_lock.acquire()
             if self.stop == True:

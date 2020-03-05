@@ -35,14 +35,14 @@ class yolov3Manager:
 					center_y = int(detection[1] * image_height)
 
 
-					width = int(detection[2] * image_width)
-					height = int(detection[3] * image_height)
-					x = int(center_x - (width/2))
-					y = int(center_y - (height/2))
+					width = max(0,int(detection[2] * image_width))
+					height = max(0,int(detection[3] * image_height))
+					x = max(0,int(center_x - (width/2)))
+					y = max(0,int(center_y - (height/2)))
 					
 					chosen_classes.append(chosen_class)
 					confidences.append(confidence)
-					boxes.append([x, y, width, height]) 
+					boxes.append([x, y, width, height])
 
 		if len(confidences) != 0:
 			indices = cv2.dnn.NMSBoxes(boxes, confidences, confidence_threshold, nonmax_threshold)
