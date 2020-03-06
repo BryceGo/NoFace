@@ -126,6 +126,10 @@ class MainWindow(QObject):
         if isinstance(self.source_files, list) and len(self.source_files) != 0:
             self.video_player.from_file = True
             self.video_player.filename = self.source_files[0]
+
+            if os.path.exists(self.video_player.filename) == False:
+                self.ui.t_main.append("Error, source file not found.")
+                return
         else:
             self.video_player.from_file = False
             self.video_player.filename = None
@@ -161,8 +165,3 @@ class MainWindow(QObject):
 if __name__ == '__main__':
     main_ui = MainWindow()
     main_ui.run()
-
-    # vm = videoManager.videoManager()
-    # vm.start_video(filename="faces.mp4", save_file=False)
-    # while True:
-    #     pass
