@@ -44,13 +44,16 @@ class videoManager:
     def process_video(self, filename, output_file, from_file = True, save_file=True, model='yl', process = 'draw', signal=None):
 
         try:
-            base_path = sys._MEIPASS
+            base_path = sys._MEIPASS + "\\"
         except:
-            base_path = os.path.abspath(".")
+            base_path = os.path.abspath(".") + "\\"
 
-        # Add temporary file
+        temp_file = ''
+        if save_file == True:
+            extension = output_file[::-1].split('.', 1)[0][::-1]
+            temp_file = base_path + "~temp." + extension
 
-        file_manager = fileManager.fileManager(filename, output_file, from_file, save_file)
+        file_manager = fileManager.fileManager(filename, temp_file, from_file, save_file)
 
         if file_manager.init_error == True:
             return None
@@ -75,16 +78,14 @@ class videoManager:
                 break
             self.stop_lock.release()
 
-            ret, t_frame = file_manager.read()
+            ret, frame = file_manager.read()
 
             if ret == False:
                 break
 
-            frame = cv2.cvtColor(copy.deepcopy(t_frame), cv2.COLOR_RGB2BGR)
-
             original_image = copy.deepcopy(frame)
 
-            if count % int(fps/5) == 0:
+            if (count % max(int(fps/5), 1)) == 0:
                 count = 0
 
                 if model == 'yl':
@@ -104,7 +105,26 @@ class videoManager:
 
             total_count += 1
             count += 1
+
         if signal != None:
             signal.emit(100)
 
         del file_manager
+
+        self.stop_lock.acquire()
+        if self.stop == False and save_file == True and os.path.exists(temp_file):
+            self.stop_lock.release()
+            audio = ffmpeg.input(filename)
+            video = ffmpeg.input(temp_file)
+
+            (
+                ffmpeg
+                .output(video.video, audio.audio, output_file, shortest=None, vcodec='copy')
+                .overwrite_output()
+                .run()
+            )
+        else:
+            self.stop_lock.release()
+
+        if os.path.exists(temp_file):
+            os.remove(temp_file)
