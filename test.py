@@ -60,6 +60,20 @@ def main(filename, output_filename):
     process1.wait()
     process2.wait()
 
+
+    audio = ffmpeg.input(filename)
+    video = ffmpeg.input(output_filename)
+
+    # audio = audio.audio.filter()
+
+    (
+        ffmpeg
+        .output(video.video, audio.audio, "output.mp4", shortest=None, vcodec='copy')
+        .overwrite_output()
+        .run()
+    )
+
+
     return
     
 
