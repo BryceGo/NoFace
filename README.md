@@ -52,15 +52,23 @@ Run the pip install
 ```
 pip install -r requirements.txt
 ```
+
 Download the yolov3-tiny model at (Insert link here)
 Copy the yolov3-tiny weights and cfg into the current working directory.
+
 ---
+
 **Windows 10:**
+
 Download the ffmpeg.exe from https://www.ffmpeg.org/download.html
 Move ffmpeg.exe into the current directory
+
 ---
+
 **Ubuntu 18.04:**
+
 **To be Continued**
+
 ---
 
 # Training your own Yolov3-Tiny Model
