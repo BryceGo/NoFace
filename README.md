@@ -29,22 +29,18 @@ Operating Systems:
 - Run ```./no_face```
 
 # Usage
-*Add Picture Here*
-Click Browse to choose video file to process
-
-*Add Picture Here*
-Click the Save as button to name the save file
-
-*Add Picture Here*
-Click Analyze Video to process the video
-
-Click the Stop button anytime to stop processing the video
-
-*Add Picture here*
-If a camera is connected and detected by your computer, you can also click the Live Stream button to process the video from the camera.
-
-*Add Picture here*
-Choose the option in the radio buttons to choose which type of processing to run
+![NoFace](/images/tutorial_app.png)
+1) Displays the statuses, warnings, errors and general information.
+2) Browse button, click and choose the video file to process
+3) Save button, click to set the output file name and location
+4) Choose the type of post processing
+a) Draw Faces - draws a rectangular green box on detected faces
+b) Blur Faces - blurs all detected faces
+c) Pixelate Faces - pixelate all detected faces
+5) Live Streams the camera feed (only works if there is a usb camera connected). A window popup will open with the processed video
+6) Analyze Video. Processes the source file and draw, blur or pixelate all detected faces.
+a) Saves the output video into the specified destination file.
+b) Pops open a window streaming the processed video if destination file is not set.
 
 # Development Installation
 ### For Windows 10:
