@@ -17,7 +17,7 @@ Operating Systems:
 - Windows 10
 - Ubuntu 18.04 (Currently being tested)
 
-# Download the file
+# Download and Run
 ### Windows 10:
 - Download the zip [file]()
 - Unzip the file
@@ -47,6 +47,8 @@ If a camera is connected and detected by your computer, you can also click the L
 Choose the option in the radio buttons to choose which type of processing to run
 
 # Development Installation
+### For Windows 10:
+
 Download and install the latest release of [Python 3.6](https://www.python.org/downloads/)
 Run the pip install
 ```
@@ -56,20 +58,28 @@ pip install -r requirements.txt
 Download the yolov3-tiny model at (Insert link here)
 Copy the yolov3-tiny weights and cfg into the current working directory.
 
----
-
-**Windows 10:**
-
 Download the ffmpeg.exe from https://www.ffmpeg.org/download.html
 Move ffmpeg.exe into the current directory
 
+Run:
+```
+python noface.py
+```
+
+Build the executable by running:
+```
+windows_build.bat
+```
+
 ---
 
-**Ubuntu 18.04:**
+### For Ubuntu 18.04:
 
 **To be Continued**
 
 ---
 
-# Training your own Yolov3-Tiny Model
-**To be Continued**
+# Notes
+More information on how to train your own custom yolo weights can be found here:
+https://pjreddie.com/darknet/yolo/
+https://github.com/AlexeyAB/darknet
