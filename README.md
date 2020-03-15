@@ -1,4 +1,4 @@
-# No Face
+# No Face: Automatic Face Blurring
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](./LICENSE)
 ![NoFace](/images/intro.gif)
 
@@ -19,7 +19,7 @@ Operating Systems:
 
 # Download and Run
 ### Windows 10:
-- Download the zip [file]()
+- Download the zip [file](https://gofile.io/?c=EH13sg)
 - Unzip the file
 - Run the exe as admin
  
