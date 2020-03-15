@@ -1,6 +1,6 @@
-# No Face
+# No Face: Automatic Face Blurring
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](./LICENSE)
-*Place Gif Here*
+![NoFace](/images/intro.gif)
 
 # Introduction
 No Face is an automated face blurring application, written in Python and capable of processing video files (MP4s and AVIs) and streams from video cameras. 
@@ -17,9 +17,9 @@ Operating Systems:
 - Windows 10
 - Ubuntu 18.04 (Currently being tested)
 
-# Download the file
+# Download and Run
 ### Windows 10:
-- Download the zip [file]()
+- Download the zip [file](https://gofile.io/?c=EH13sg)
 - Unzip the file
 - Run the exe as admin
  
@@ -29,39 +29,60 @@ Operating Systems:
 - Run ```./no_face```
 
 # Usage
-*Add Picture Here*
-Click Browse to choose video file to process
-
-*Add Picture Here*
-Click the Save as button to name the save file
-
-*Add Picture Here*
-Click Analyze Video to process the video
-
-Click the Stop button anytime to stop processing the video
-
-*Add Picture here*
-If a camera is connected and detected by your computer, you can also click the Live Stream button to process the video from the camera.
-
-*Add Picture here*
-Choose the option in the radio buttons to choose which type of processing to run
+![NoFace](/images/tutorial_app.png)
+1) Displays the statuses, warnings, errors and general information.
+2) Browse button, click and choose the video file to process
+3) Save button, click to set the output file name and location
+4) Choose the type of post processing
+   - Draw Faces - draws a rectangular green box on detected faces
+   - Blur Faces - blurs all detected faces
+   - Pixelate Faces - pixelate all detected faces
+5) Live Streams the camera feed (only works if there is a usb camera connected). A window popup will open with the processed video
+6) Analyze Video. Processes the source file and draw, blur or pixelate all detected faces.
+   - Saves the output video into the specified destination file.
+   - Pops open a window streaming the processed video if destination file is not set.
 
 # Development Installation
+### For Windows 10:
+
 Download and install the latest release of [Python 3.6](https://www.python.org/downloads/)
+
 Run the pip install
 ```
 pip install -r requirements.txt
 ```
+
 Download the yolov3-tiny model at (Insert link here)
+
 Copy the yolov3-tiny weights and cfg into the current working directory.
----
-**Windows 10:**
+
 Download the ffmpeg.exe from https://www.ffmpeg.org/download.html
+
 Move ffmpeg.exe into the current directory
----
-**Ubuntu 18.04:**
-**To be Continued**
+
+Run:
+```
+python noface.py
+```
+
+Build the executable by running:
+
+```
+windows_build.bat
+```
+
 ---
 
-# Training your own Yolov3-Tiny Model
+### For Ubuntu 18.04:
+
 **To be Continued**
+
+---
+
+# Notes
+
+More information on how to train your own custom yolo weights can be found here:
+
+https://pjreddie.com/darknet/yolo/
+
+https://github.com/AlexeyAB/darknet
