@@ -92,12 +92,14 @@ class videoManager:
                     faces = self.fm.detect_faces_yolo(frame, confidence_threshold=0.3)
 
                     current_faces = self.fm.track_faces(frame = original_image, detected_faces = faces, faces_currently_tracking = current_faces)
-                    file_manager.write(self.fm.process_frame(original_image, current_faces, process))
+                    img_face = self.fm.process_frame(original_image, current_faces, process)
+                    file_manager.write(img_face)
 
             else: #if count % 3 == 0:
                 if model == 'yl':
                     current_faces = self.fm.track_faces(frame = original_image, faces_currently_tracking = current_faces)
-                    file_manager.write(self.fm.process_frame(original_image, current_faces, process))
+                    img_face = self.fm.process_frame(original_image, current_faces, process)
+                    file_manager.write(img_face)
 
             if from_file == True and signal != None:
                 if total_count % fps == 0:

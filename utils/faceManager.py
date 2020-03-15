@@ -46,12 +46,15 @@ class faceManager:
         current_trackers = []
         current_bbox = []
 
+        height = frame.shape[0]
+        width = frame.shape[1]
+
         for tracker, bound_box in faces_currently_tracking:
             success, bbox = tracker.update(frame)
 
             bbox = (max(0,int(bbox[0])), max(0,int(bbox[1])), max(0,int(bbox[2])), max(0,int(bbox[3])))
 
-            if success:
+            if success and (bbox[0] < width or bbox[1] < height) and (bbox[2] != 0 and bbox[3] != 0):
                 current_trackers.append(tracker)
                 current_bbox.append(bbox)
 
@@ -73,7 +76,9 @@ class faceManager:
 
                 tracker = cv2.TrackerKCF_create()
                 tracker.init(frame, box)
-                currently_tracking.append((tracker, box))
+
+                if (box[0] < width or box[1] < height) and (box[2] != 0 and box[3] != 0):
+                    currently_tracking.append((tracker, box))
         
         return currently_tracking
 
@@ -90,23 +95,40 @@ class faceManager:
         return output
 
     def draw_frame(self, frame, faces, color=(0,255,0)):
+        y_max = frame.shape[0]
+        x_max = frame.shape[1]
+
         for (tracker, (x,y,w,h)) in faces:
+
+            if (x >= x_max or y >= y_max) or frame[y:y+h, x:x+w].shape[0] <= 3 or frame[y:y+h, x:x+w].shape[1] <= 3:
+                continue
+            
             frame = cv2.rectangle(frame, (x,y), (x+w,y+h), color, 1)
         return frame
 
     def pixelate_frame(self, frame, faces, division = 10):
+
+        y_max = frame.shape[0]
+        x_max = frame.shape[1]
+
         for (tracker, (x,y,w,h)) in faces:
+
+            if (x >= x_max or y >= y_max) or frame[y:y+h, x:x+w].shape[0] <= 3 or frame[y:y+h, x:x+w].shape[1] <= 3:
+                continue
 
             if len(frame.shape) > 2:
                 cut_image = frame[y:y+h, x:x+w, :]
                 
                 rows, cols, dims = cut_image.shape
-
                 for i in range(1, division+1):
                     for j in range(1, division+1):
                         for k in range(0,dims):
-                            avg = int(np.average(frame[y+int(((i-1)/division)*rows):y+int((i/division)*rows), x+int(((j-1)/division)*cols):x+int((j/division)*cols), k]))
-                            frame[y+int(((i-1)/division)*rows):y+int((i/division)*rows), x+int(((j-1)/division)*cols):x+int((j/division)*cols), k].fill(avg)
+                            try:
+                                cut_square = frame[y+int(((i-1)/division)*rows):y+int((i/division)*rows), x+int(((j-1)/division)*cols):x+int((j/division)*cols), k]
+                                avg = int(np.average(cut_square))
+                                frame[y+int(((i-1)/division)*rows):y+int((i/division)*rows), x+int(((j-1)/division)*cols):x+int((j/division)*cols), k].fill(avg)
+                            except:
+                                pass
 
             else:
                 cut_image = frame[y:y+h, x:x+w]
@@ -114,22 +136,36 @@ class faceManager:
 
                 for i in range(1, division+1):
                     for j in range(1, division+1):
-                        avg = int(np.average(frame[y+int(((i-1)/division)*rows):y+int((i/division)*rows), x+int(((j-1)/division)*cols):x+int((j/division)*cols)]))
-                        frame[y+int(((i-1)/division)*rows):y+int((i/division)*rows), x+int(((j-1)/division)*cols):x+int((j/division)*cols)].fill(avg)
+                        try:
+                            cut_square = frame[y+int(((i-1)/division)*rows):y+int((i/division)*rows), x+int(((j-1)/division)*cols):x+int((j/division)*cols)]
+                            avg = int(np.average(cut_square))
+                            frame[y+int(((i-1)/division)*rows):y+int((i/division)*rows), x+int(((j-1)/division)*cols):x+int((j/division)*cols)].fill(avg)
+                        except:
+                            pass
         return frame
 
     def blur_frame(self, frame, faces, intensity = 5):
+
+        y_max = frame.shape[0]
+        x_max = frame.shape[1]
+
         for (tracker, (x,y,w,h)) in faces:
             shape = ceil(max(w,h)/intensity)
             if shape == 0:
                 shape = 1
             kernel = np.ones((shape,shape), np.float32)/(shape*shape)
 
+            # No point in blurring pixels if they are too small
+            if (x >= x_max or y >= y_max) or frame[y:y+h, x:x+w].shape[0] <= 3 or frame[y:y+h, x:x+w].shape[1] <= 3:
+                continue
+
             if len(frame.shape) > 2:
                 for i in range(0,frame.shape[2]):
                     frame[y:y+h, x:x+w, i] = cv2.filter2D(frame[y:y+h, x:x+w, i], -1, kernel)
             else:
                 frame[y:y+h, x:x+w] = cv2.filter2D(frame[y:y+h, x:x+w], -1, kernel)
+
+            print((x,y,w,h), frame.shape)
 
         return frame
 
