@@ -1,6 +1,6 @@
 # No Face
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](./LICENSE)
-*Place Gif Here*
+![NoFace](/images/intro.gif)
 
 # Introduction
 No Face is an automated face blurring application, written in Python and capable of processing video files (MP4s and AVIs) and streams from video cameras. 
@@ -34,27 +34,30 @@ Operating Systems:
 2) Browse button, click and choose the video file to process
 3) Save button, click to set the output file name and location
 4) Choose the type of post processing
-a) Draw Faces - draws a rectangular green box on detected faces
-b) Blur Faces - blurs all detected faces
-c) Pixelate Faces - pixelate all detected faces
+   - Draw Faces - draws a rectangular green box on detected faces
+   - Blur Faces - blurs all detected faces
+   - Pixelate Faces - pixelate all detected faces
 5) Live Streams the camera feed (only works if there is a usb camera connected). A window popup will open with the processed video
 6) Analyze Video. Processes the source file and draw, blur or pixelate all detected faces.
-a) Saves the output video into the specified destination file.
-b) Pops open a window streaming the processed video if destination file is not set.
+   - Saves the output video into the specified destination file.
+   - Pops open a window streaming the processed video if destination file is not set.
 
 # Development Installation
 ### For Windows 10:
 
 Download and install the latest release of [Python 3.6](https://www.python.org/downloads/)
+
 Run the pip install
 ```
 pip install -r requirements.txt
 ```
 
 Download the yolov3-tiny model at (Insert link here)
+
 Copy the yolov3-tiny weights and cfg into the current working directory.
 
 Download the ffmpeg.exe from https://www.ffmpeg.org/download.html
+
 Move ffmpeg.exe into the current directory
 
 Run:
@@ -63,6 +66,7 @@ python noface.py
 ```
 
 Build the executable by running:
+
 ```
 windows_build.bat
 ```
@@ -76,6 +80,9 @@ windows_build.bat
 ---
 
 # Notes
+
 More information on how to train your own custom yolo weights can be found here:
+
 https://pjreddie.com/darknet/yolo/
+
 https://github.com/AlexeyAB/darknet
