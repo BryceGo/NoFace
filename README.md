@@ -48,7 +48,9 @@ pip install -r requirements.txt
 ```
 
 Download the yolov3-tiny cfg and weights at:
+
 [tiny yolov3-cfg](https://www.brycegolamco.com/media/yolov3-tiny.cfg)
+
 [tiny yolov3-weights](https://www.brycegolamco.com/media/yolov3-tiny.weights) 
 
 Copy the yolov3-tiny weights and cfg into the current working directory.
