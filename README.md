@@ -15,18 +15,13 @@ All processing is done on CPU only
 # Requirements
 Operating Systems:
 - Windows 10
-- Ubuntu 18.04 (Currently being tested)
+- Ubuntu 20.04 (Currently being tested)
 
 # Download and Run
 ### Windows 10:
-- Download the zip [file](https://gofile.io/?c=EH13sg)
+- Download the zip file from the releases
 - Unzip the file
 - Run the exe as admin
- 
-### Ubuntu 18.04:
-- Download the tar [file]()
-- Unzip the file
-- Run ```./no_face```
 
 # Usage
 ![NoFace](/images/tutorial_app.png)
@@ -52,7 +47,9 @@ Run the pip install
 pip install -r requirements.txt
 ```
 
-Download the yolov3-tiny model at (Insert link here)
+Download the yolov3-tiny cfg and weights at:
+[tiny yolov3-cfg](https://www.brycegolamco.com/media/yolov3-tiny.cfg)
+[tiny yolov3-weights](https://www.brycegolamco.com/media/yolov3-tiny.weights) 
 
 Copy the yolov3-tiny weights and cfg into the current working directory.
 
@@ -70,13 +67,6 @@ Build the executable by running:
 ```
 windows_build.bat
 ```
-
----
-
-### For Ubuntu 18.04:
-
-**To be Continued**
-
 ---
 
 # Notes
